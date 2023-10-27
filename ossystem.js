@@ -35,12 +35,12 @@ const res3 = {
   },
 };
 
+
 const genResult = (type) => {
   biomarkers.forEach((biomarker, index) => {
     const result = biomarker;
 
     let res;
-    const type = "type1";
 
     switch (type) {
       case "type1":
@@ -80,4 +80,6 @@ const genResult = (type) => {
   });
 };
 
-genResult();
+genResult("type1");
+genResult("type2");
+genResult("type3");
