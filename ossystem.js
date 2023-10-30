@@ -64,10 +64,16 @@ const genResult = (type) =>
         console.log("Invalid type");
     }
 
+    if (previousValue.length === 3) {
+      console.log(previousValue);
+
+      return;
+    }
+
     return previousValue;
   }, []);
 
-console.log(genResult("type2"));
+console.log(genResult("type1"));
 
 // const res1 = {
 //   biomarkers1114Translocation: [
