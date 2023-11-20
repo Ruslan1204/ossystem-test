@@ -1,79 +1,104 @@
-const biomarkers = [
-  "11_14_translocation",
-  "11q_deletion",
-  "13q_deletion",
-  "15_17_translocation",
-  "17p_deletion",
-  "bcr_abl1",
-  "c_met",
-  "cd303_bdca_1",
-  "cyclin_e_ccne1",
-];
+// const biomarkers = [
+//   "11_14_translocation",
+//   "11q_deletion",
+//   "13q_deletion",
+//   "15_17_translocation",
+//   "17p_deletion",
+//   "bcr_abl1",
+//   "c_met",
+//   "cd303_bdca_1",
+//   "cyclin_e_ccne1",
+// ];
 
-const genResult = (type) =>
-  biomarkers.reduce((previousValue, biomarker) => {
-    let propName =
-      "biomarkers" +
-      biomarker
-        .replace(/^[^a-zа-яё]*([a-zа-яё])/gi, function (m) {
-          return m.toUpperCase();
-        })
-        .replace(/_/gi, "");
+// Ну и в зависимости от тайпа возвращать biomarkersDbMappingFields  или biomarkersModelProfileTableFields или biomarkersModelProfileTableFields
 
-    const res1 = {
-      [propName]: [
-        {
-          field: "biomarkers",
-          value: biomarker,
-        },
-      ],
-    };
 
-    const res2 = {
-      [propName]: [
-        {
-          type: "string10",
-          value: "biomarkers" + biomarker,
-        },
-      ],
-    };
 
-    const res3 = {
-      [propName]: {
-        name: "biomarkers",
-        fields: {
-          ["biomarkers" + biomarker]: "biomarkers" + biomarker,
-        },
-      },
-    };
+// const genResult = (type) =>
+//   biomarkers.reduce((previousValue, biomarker) => {
+//     // let propName =
+//     //   "biomarkers" +
+//     //   biomarker
+//     //     .replace(/^[^a-zа-яё]*([a-zа-яё])/gi, function (m) {
+//     //       return m.toUpperCase();
+//     //     })
+//     //     .replace(/_/gi, "");
 
-    switch (type) {
-      case "type1":
-        previousValue.push(res1);
-        break;
+//     // console.log(...previousValue)
+//     // console.log([`biomarkers_${biomarker}`])
 
-      case "type2":
-        previousValue.push(res2);
-        break;
+//     const parts = biomarker.split("_");
+//     // console.log(parts)
+//     const transformedString = parts
+//       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+//       .join("");
 
-      case "type3":
-        previousValue.push(res3);
-        break;
+//     // console.log(transformedString)
 
-      default:
-        console.log("Invalid type");
-    }
+//     const res1 = {
+//       ["biomarkers" + transformedString]: [
+//         {
+//           field: "biomarkers",
+//           value: biomarker,
+//         },
+//       ],
+//     };
 
-    if (previousValue.length === 3) {
-      console.log(previousValue);
+//     const res2 = {
+//       ["biomarkers" + transformedString]: [
+//         {
+//           type: "string10",
+//           value: "biomarkers" + biomarker,
+//         },
+//       ],
+//     };
 
-      return;
-    }
+//     const res3 = {
+//       ["biomarkers" + transformedString]: {
+//         name: "biomarkers",
+//         fields: {
+//           ["biomarkers" + biomarker]: "biomarkers" + biomarker,
+//         },
+//       },
+//     };
 
-    return previousValue;
-  }, []);
+//     switch (type) {
+//       case "type1":
+//         previousValue.push(res1);
+//         break;
 
-console.log(genResult("type1"));
+//       case "type2":
+//         previousValue.push(res2);
+//         break;
+
+//       case "type3":
+//         previousValue.push(res3);
+//         break;
+
+//       default:
+//         console.log("Invalid type");
+//     }
+
+//     if (previousValue.length === 3) {
+//       console.log(previousValue);
+
+//       return;
+//     }
+
+//     return previousValue;
+//   }, []);
+
+// console.log(genResult("type1"));
+
+
+// const generateFieldMappingKey = (biomarker) => {
+//   const parts = biomarker.split('_');
+//   const transformedString = parts
+//       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+//       .join('');
+
+//   return `biomarkers${transformedString}`;
+// }
 
 // const res1 = {
 //   biomarkers1114Translocation: [
@@ -82,6 +107,19 @@ console.log(genResult("type1"));
 //   biomarkers11qDeletion: [{ field: "biomarkers", value: "11q_deletion" }],
 //   biomarkers13qDeletion: [{ field: "biomarkers", value: "13q_deletion" }],
 // };
+
+// const biomarkersModelProfileTableFields = biomarkers.reduce(
+//   (prev, curr) => ({
+//     ...prev,
+//     [generateFieldMappingKey(curr)]: {
+//       type: "string10",
+//       field: `biomarkers_${curr}`,
+//     },
+//   }),
+//   {}
+// );
+
+// console.log(biomarkersModelProfileTableFields)
 
 // const rer2 = {
 //   biomarkers1114Translocation: {
@@ -92,6 +130,17 @@ console.log(genResult("type1"));
 //   biomarkers13qDeletion: { type: "string10", field: "biomarkers_13q_deletion" },
 // };
 
+// const biomarkersDbMappingFields = biomarkers.reduce(
+//   (prev, curr) => ({
+//     ...prev,
+//     [generateFieldMappingKey(curr)]: [{ field: "biomarkers", value: curr }],
+//   }),
+//   {}
+// );
+
+// console.log(biomarkersModelProfileTableFields)
+
+
 // const res3 = {
 //   name: "biomarkers",
 //   fields: {
@@ -100,6 +149,16 @@ console.log(genResult("type1"));
 //     biomarkers_13q_deletion: "biomarkers_13q_deletion",
 //   },
 // };
+
+// const biomarkersQueriesMatchesFields = {
+//   name: 'biomarkers',
+//   fields: biomarkers.reduce((prev, curr) => ({
+//       ...prev,
+//       [`biomarkers_${curr}`]:` biomarkers_${curr}`,
+//   }), {}),
+// };
+
+// console.log(biomarkersQueriesMatchesFields)
 
 // genResult("type3");
 
@@ -159,3 +218,5 @@ console.log(genResult("type1"));
 
 //   // console.log(res);
 // });
+
+
